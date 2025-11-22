@@ -1,0 +1,75 @@
+Summary
+
+This book is a relevant start because Robert C. Martin is a signatory of the Agile manifesto. I will sum up only the parts I found helpful as a machine learning engineer. There are many other stimulating topics for a software developer in the book.
+History
+
+At the beginning in the 1950s and 1960s, small teams were doing small things.
+
+In the 1970s, the idea was to do big things with big teams. The population of programmers was starting to explode.
+
+For Robert C. Martin, the secret was to do many small things with many small teams. This is the concept of Agile: big things are done by many collaborating small teams doing small things.
+
+Now, Agile is a word often mixed with Lean and Safe. That is not bad. But that is not the original Agile message.
+
+In 2001, waterfalls were everywhere. 17 experts gathered. They wanted to create a manifesto. The purpose was to introduce a more effective and light approach. These 17 men came from the XP team, the Scrum team and other light processes. Some were unaffiliated.
+
+They wanted to gather their common beliefs about software development in general.
+
+They formed Agile values and principles.
+
+For Robert C. Martin, waterfalls work well for some projects. These ones consist of high costs, well defined problems and extremely specific goals.
+
+Agile works well for another kind of projects. These ones consist of partially defined problems. They also enjoy a low cost of change.
+Agile is a data driven approach
+
+Something very delightful as a machine learning engineer who loves data.
+
+Agile is a way to be feedback driven by gathering data about what happens in a project.
+
+You don’t want to manage with hope. Agile must kill hope and gives data instead. Agile is not about going fast, but having a better view of what is happening.
+
+Agile produces data. Then, you can make decisions.
+Agile is not only about management, technical methods such as tests are important too
+
+Scrum may be a good start. Yet, without XP principles and practices, Agile is not agile.
+
+For instance, tests, collective ownership or clean code are part of Agile.
+Shorten your iteration to deliver smoothly
+
+If you deliver once a year, start by delivering every 6 months, then every 3 months, etc.
+A project is a marathon, not a sprint, nor a sequence of sprints
+
+You must work at a sustainable pace. Take time to sleep and rest.
+Agile is for “software teams”
+
+Robert C. Martin explains that Agile was designed for software teams. He is embarrassed when someone asks him how to do Agile in other areas.
+
+Oops, but I do data science. Am I really in a “software team”?
+Agile could be an inspiration
+
+At the end, Robert C. Martin lets a coach speak about his vision of Agile. This coach explains that for him Agile is a start. It helps you to find your own principles and practices in your current job.
+
+Phew, I am relieved. Finally, Agile can be a start to organise a data science team.
+In a nutshell
+
+Agile is inspiring for data science. Being feedback driven by producing data is attractive. These data are about time to complete a specific task, mood of the team at each iteration, etc.
+
+Besides, it fits for the software development part of my job.
+
+At the same time, Agile was not designed for data science. Sometimes, it does not fit well.
+
+For instance, as a huge part of the program comes from data, the role of the product owner is different.
+
+I agree with the coach speaking at the end of the book. Agile can be an inspiration. But we also have to find new rules for data science which is quite a new game.
+Conclusion
+
+It is always interesting to come back to the roots of a notion. Agile can be an inspiration and a good start for data science.
+
+Most of all, I am a big fan of three ideas:
+
+    producing data to understand your job better
+    regular retrospectives to set a loop of continuous improvement
+    highlighting technical methods such as tests, etc.
+
+Clean Agile: Back to Basics by Robert Cecil Martin
+https://medium.com/@nastasia.saby/clean-agile-back-to-basics-robert-c-765c5e21c91f
