@@ -2,13 +2,14 @@ package org.engine;
 
 import java.util.HashMap;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         Reader reader = new Reader();
-        reader.readDocs("SWBooks");
+        reader.readDocs("search/SWBooks");
+
         HashMap<String, String> docs = reader.getDocs();
-        System.out.println(docs.keySet());
+
+        SearchEngine engine = new SearchEngine(docs);
+
     }
 }
