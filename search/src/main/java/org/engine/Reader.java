@@ -15,11 +15,9 @@ public class Reader {
             for (Path file : stream) {
                 String fileName = file.getFileName().toString();
                 System.out.printf("Reading: %s\n----------------------\n", fileName);
-
-                for (String line : Files.readAllLines(file)) {
-                    docs.put(fileName, line);
-                }
+                docs.put(fileName, Files.readString(file));
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
