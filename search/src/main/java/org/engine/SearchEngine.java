@@ -5,9 +5,11 @@ import java.util.function.Predicate;
 
 
 class Utils {
+    // Refactor: abstract normalizer
     public static String normalizeString(String s) {
         return s
                 .strip()
+                .replaceAll("\'|\"", "")
                 .toLowerCase();
     }
 
@@ -24,8 +26,8 @@ public class SearchEngine {
     protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
             "is", "the", "i", "a", "an", "and", "of", "to", "in", "for",
             "on", "with", "as", "by", "this", "that", "it", "at", "from",
-            "which", "but"
-    ));
+            "which", "but", "or", "be", "not"
+    )); // Refactor: take as param
 
 
     private HashMap<String, LinkedList<Integer>> searchIndex;
@@ -45,19 +47,16 @@ public class SearchEngine {
             docsNameIndex[++docsCount] = normDoc;
             return true;
         }
-
     }
 
     private ArrayList<String> tokenize(String doc) {
         return new ArrayList<>(Arrays
-                .stream(doc.split("[ \\p{P}\\d]+"))
+                .stream(doc.split("\\W|[0-9]"))
                 .map(Utils::normalizeString)
+                .filter(Predicate.not(stopWords::contains))
                 .filter(Predicate.not(String::isBlank))
                 .toList()
         );
-
-        /* TODO: compare the number of tokens compare with `wc -w` there are fewer
-         e.g: Working Effectively With Legacy Code.txt: 8190 (by `wc -w`) VS 8075 (by `tokenize`) */
     }
 
     public void refreshIndex(HashMap<String, String> docs) {
@@ -67,6 +66,8 @@ public class SearchEngine {
             if (addDoc(docName)) {
                 int docIndex = docsCount;
                 ArrayList<String> tokens = tokenize(docs.get(docName));
+
+                // DEBUG
                 if (docIndex == 1) {
                     System.out.println(docName);
                     System.out.println(tokens);
