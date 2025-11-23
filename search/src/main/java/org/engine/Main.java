@@ -8,7 +8,6 @@ public class Main {
         reader.readDocs("search/SWBooks");
 
         HashMap<String, String> docs = reader.getDocs();
-
         SearchEngine engine = new SearchEngine(docs);
 
     }
