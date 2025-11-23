@@ -1,6 +1,8 @@
 package org.engine;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 
@@ -19,6 +21,12 @@ class Utils {
 public class SearchEngine {
 
     protected static final int MAX_DOCS = 1000;
+    protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
+            "is", "the", "i", "a", "an", "and", "of", "to", "in", "for",
+            "on", "with", "as", "by", "this", "that", "it", "at", "from",
+            "which", "but"
+    ));
+
 
     private HashMap<String, LinkedList<Integer>> searchIndex;
     private final String[] docsNameIndex = new String[MAX_DOCS];
