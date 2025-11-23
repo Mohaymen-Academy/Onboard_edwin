@@ -3,11 +3,10 @@ package org.engine;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class Reader {
 
-    HashMap<String,String> docs = new HashMap<>();
+    HashMap<String, String> docs = new HashMap<>();
 
     public void readDocs(String dirName) {
         Path directory = Paths.get(dirName);
@@ -18,16 +17,15 @@ public class Reader {
                 System.out.printf("Reading: %s\n----------------------\n", fileName);
 
                 for (String line : Files.readAllLines(file)) {
-                    docs.put(fileName, line.toLowerCase());
+                    docs.put(fileName, line);
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public HashMap<String,String> getDocs() {
+    public HashMap<String, String> getDocs() {
         return docs;
     }
 }
