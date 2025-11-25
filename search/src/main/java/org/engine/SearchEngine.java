@@ -21,6 +21,10 @@ class Utils {
 }
 
 public class SearchEngine {
+    /*
+        Implements inverted index algorithm
+     */
+
     public static final boolean DEBUG = true;
 
     protected static final int MAX_DOCS = 1000;
@@ -67,7 +71,7 @@ public class SearchEngine {
         );
     }
 
-    private void refreshDocsNameIndex(HashMap<String, String> docs) {
+    public void refreshIndex(HashMap<String, String> docs) {
         searchIndex = new HashMap<>();
         String normDocName;
 
@@ -85,10 +89,6 @@ public class SearchEngine {
                 }
             }
         }
-    }
-
-    public void refreshIndex(HashMap<String, String> docs) {
-        refreshDocsNameIndex(docs);
     }
 
     public List<String> search(String query) {
