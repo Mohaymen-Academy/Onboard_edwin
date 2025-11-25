@@ -17,7 +17,7 @@ public class Main {
         System.out.printf("Query = %s\n%s\n", query, engine.search(query));
 
 
-        query = "meetings +automation +notincludedword";
+        query = "meetings +automation +notincludedword -email";
         System.out.printf("Query = %s\n%s\n", query, engine.search(query));
 
 

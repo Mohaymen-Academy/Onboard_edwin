@@ -163,8 +163,8 @@ public class SearchEngine {
             else
                 result.retainAll(foundDocs);
         }
-//        result.removeAll()
-        parser.getNotPatterns();
+
+        result.removeAll(findAllDocs(parser.getNotPatterns()));
 
         return result;
     }
