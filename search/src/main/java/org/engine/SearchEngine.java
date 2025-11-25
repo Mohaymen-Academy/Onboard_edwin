@@ -21,6 +21,40 @@ class Utils {
     }
 }
 
+class AdvanceQueryParser {
+    private HashSet<String> andPatterns, orPatterns, notPatterns;
+
+    public AdvanceQueryParser(String query) {
+        andPatterns = new HashSet<>();
+        orPatterns = new HashSet<>();
+        notPatterns = new HashSet<>();
+
+        Arrays.stream(query.split(" "))
+                .filter(Predicate.not(String::isBlank))
+                .forEach(pattern -> {
+                    String head = pattern.substring(0, 1);
+                    String tail = pattern.substring(1);
+                    switch (head) {
+                        case "+" -> orPatterns.add(tail);
+                        case "-" -> notPatterns.add(tail);
+                        default -> andPatterns.add(tail);
+                    }
+                });
+    }
+
+    public HashSet<String> getAndPatterns() {
+        return andPatterns;
+    }
+
+    public HashSet<String> getOrPatterns() {
+        return orPatterns;
+    }
+
+    public HashSet<String> getNotPatterns() {
+        return notPatterns;
+    }
+}
+
 public class SearchEngine {
     /*
         Implements inverted index algorithm
@@ -92,11 +126,34 @@ public class SearchEngine {
         }
     }
 
-    public TreeSet<String> search(String query) {
-        query = Utils.normalizeString(query);
-        return searchIndex.getOrDefault(query, new TreeSet<>())
+    private TreeSet<String> findDocs(String word) {
+        return searchIndex
+                .getOrDefault(word, new TreeSet<>())
                 .stream()
                 .map(i -> docsNameIndex[i])
                 .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+
+    public TreeSet<String> search(String query) {
+        TreeSet<String> result = new TreeSet<>();
+
+        query = Utils.normalizeString(query);
+        AdvanceQueryParser parser = new AdvanceQueryParser(query);
+        if (DEBUG) {
+            System.out.printf("AND Patterns = %s\nOR PATTERNS = %s\nNOT PATTERNS = %s\n",
+                    parser.getAndPatterns(),
+                    parser.getOrPatterns(),
+                    parser.getNotPatterns()
+            );
+        }
+
+        parser.getOrPatterns()
+                .forEach(doc -> result.addAll(findDocs(doc)));
+
+//        parser.getAndPatterns();
+//        parser.getNotPatterns();
+
+        return result;
     }
 }
