@@ -31,7 +31,7 @@ public class SearchEngine {
     )); // Refactor: take as param
 
 
-    private HashMap<String, ArrayList<Integer>> searchIndex;
+    private HashMap<String, SortedSet<Integer>> searchIndex;
     private final String[] docsNameIndex = new String[MAX_DOCS];
     private int lastDocIndex = 0;
 
@@ -62,7 +62,7 @@ public class SearchEngine {
     private void refreshSearchIndex(int docIndex, ArrayList<String> tokens) {
         tokens.forEach(word ->
                 searchIndex
-                        .computeIfAbsent(word, ignored -> new ArrayList<>())
+                        .computeIfAbsent(word, ignored -> new TreeSet<>())
                         .add(docIndex)
         );
     }
@@ -89,12 +89,11 @@ public class SearchEngine {
 
     public void refreshIndex(HashMap<String, String> docs) {
         refreshDocsNameIndex(docs);
-        // TODO: Sort keys and values of searchIndex
     }
 
     public List<String> search(String query) {
         query = Utils.normalizeString(query);
-        return searchIndex.getOrDefault(query, new ArrayList<>())
+        return searchIndex.getOrDefault(query, new TreeSet<>())
                 .stream()
                 .map(i -> docsNameIndex[i])
                 .toList();
