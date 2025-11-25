@@ -9,7 +9,7 @@ class Utils {
     public static String normalizeString(String s) {
         return s
                 .strip()
-                .replaceAll("\'|\"", "")
+                .replaceAll("'|\"", "")
                 .toLowerCase();
     }
 
@@ -31,21 +31,20 @@ public class SearchEngine {
     )); // Refactor: take as param
 
 
-    private HashMap<String, LinkedList<Integer>> searchIndex;
+    private HashMap<String, ArrayList<Integer>> searchIndex;
     private final String[] docsNameIndex = new String[MAX_DOCS];
-    private int docsCount = 0;
+    private int lastDocIndex = 0;
 
     public SearchEngine(HashMap<String, String> docs) {
-        refreshIndex(docs);
+        refreshDocsNameIndex(docs);
 //        Utils.printDocsNameIndex(docsNameIndex);
     }
 
     private boolean addDoc(String docName) {
-        String normDocName = Utils.normalizeString(docName);
-        if (normDocName.isEmpty()) {
+        if (docName.isEmpty()) {
             return false;
         } else {
-            docsNameIndex[++docsCount] = normDocName;
+            docsNameIndex[++lastDocIndex] = docName;
             return true;
         }
     }
@@ -60,13 +59,24 @@ public class SearchEngine {
         );
     }
 
-    public void refreshIndex(HashMap<String, String> docs) {
+    public void refreshSearchIndex(int docIndex, ArrayList<String> tokens) {
+        tokens.forEach(word ->
+                searchIndex
+                        .computeIfAbsent(word, ignored -> new ArrayList<>())
+                        .add(docIndex)
+        );
+    }
+
+    public void refreshDocsNameIndex(HashMap<String, String> docs) {
         searchIndex = new HashMap<>();
+        String normDocName;
 
         for (String docName : docs.keySet()) {
-            if (addDoc(docName)) {
-                int docIndex = docsCount;
+            normDocName = Utils.normalizeString(docName);
+            if (addDoc(normDocName)) {
+                int docIndex = lastDocIndex;
                 ArrayList<String> tokens = tokenize(docs.get(docName));
+                refreshSearchIndex(lastDocIndex, tokens);
 
                 if (DEBUG && docIndex == 1) {
                     System.out.println(docName);
