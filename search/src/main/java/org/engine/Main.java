@@ -11,13 +11,19 @@ public class Main {
 
         HashMap<String, String> docs = reader.getDocs();
         SearchEngine engine = new SearchEngine(docs);
+        String query;
+
+        query = "+builder";
+        System.out.printf("Query = %s\n%s\n", query, engine.search(query));
 
 
-        System.out.println(engine.search("+builder"));
+        query = "meetings +automation +notincludedword";
+        System.out.printf("Query = %s\n%s\n", query, engine.search(query));
+
 
         try (Scanner in = new Scanner(System.in)) {
             do {
-                String query = in.nextLine();
+                query = in.nextLine();
                 System.out.println("SEARCH:");
                 System.out.println(engine.search(query));
             }

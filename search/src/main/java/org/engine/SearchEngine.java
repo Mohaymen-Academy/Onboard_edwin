@@ -37,7 +37,7 @@ class AdvanceQueryParser {
                     switch (head) {
                         case "+" -> orPatterns.add(tail);
                         case "-" -> notPatterns.add(tail);
-                        default -> andPatterns.add(tail);
+                        default -> andPatterns.add(pattern);
                     }
                 });
     }
@@ -134,6 +134,12 @@ public class SearchEngine {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
+    private Set<String> findAllDocs(Set<String> words) {
+        return words
+                .stream()
+                .flatMap(doc -> findDocs(doc).stream())
+                .collect(Collectors.toSet());
+    }
 
     public TreeSet<String> search(String query) {
         TreeSet<String> result = new TreeSet<>();
@@ -147,12 +153,18 @@ public class SearchEngine {
                     parser.getNotPatterns()
             );
         }
+        result.addAll(findAllDocs(parser.getOrPatterns()));
 
-        parser.getOrPatterns()
-                .forEach(doc -> result.addAll(findDocs(doc)));
-
-//        parser.getAndPatterns();
-//        parser.getNotPatterns();
+        Set<String> andPatterns = parser.getAndPatterns();
+        if (!andPatterns.isEmpty()) {
+            Set<String> foundDocs = findAllDocs(andPatterns);
+            if (result.isEmpty())
+                result.addAll(foundDocs);
+            else
+                result.retainAll(foundDocs);
+        }
+//        result.removeAll()
+        parser.getNotPatterns();
 
         return result;
     }
