@@ -36,7 +36,7 @@ public class SearchEngine {
     private int lastDocIndex = 0;
 
     public SearchEngine(HashMap<String, String> docs) {
-        refreshDocsNameIndex(docs);
+        refreshIndex(docs);
 //        Utils.printDocsNameIndex(docsNameIndex);
     }
 
@@ -59,7 +59,7 @@ public class SearchEngine {
         );
     }
 
-    public void refreshSearchIndex(int docIndex, ArrayList<String> tokens) {
+    private void refreshSearchIndex(int docIndex, ArrayList<String> tokens) {
         tokens.forEach(word ->
                 searchIndex
                         .computeIfAbsent(word, ignored -> new ArrayList<>())
@@ -67,7 +67,7 @@ public class SearchEngine {
         );
     }
 
-    public void refreshDocsNameIndex(HashMap<String, String> docs) {
+    private void refreshDocsNameIndex(HashMap<String, String> docs) {
         searchIndex = new HashMap<>();
         String normDocName;
 
@@ -87,4 +87,16 @@ public class SearchEngine {
         }
     }
 
+    public void refreshIndex(HashMap<String, String> docs) {
+        refreshDocsNameIndex(docs);
+        // TODO: Sort keys and values of searchIndex
+    }
+
+    public List<String> search(String query) {
+        query = Utils.normalizeString(query);
+        return searchIndex.getOrDefault(query, new ArrayList<>())
+                .stream()
+                .map(i -> docsNameIndex[i])
+                .toList();
+    }
 }
