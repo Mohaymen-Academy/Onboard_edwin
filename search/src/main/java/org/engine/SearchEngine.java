@@ -153,7 +153,14 @@ public class SearchEngine {
                     parser.getNotPatterns()
             );
         }
-        result.addAll(findAllDocs(parser.getOrPatterns()));
+
+        Set<String> orPatterns = parser.getOrPatterns();
+
+        result.addAll(findAllDocs(orPatterns));
+        if (!orPatterns.isEmpty() && result.isEmpty()) {
+            // Force that at least one OR pattern matches
+            return result;
+        }
 
         Set<String> andPatterns = parser.getAndPatterns();
         if (!andPatterns.isEmpty()) {
