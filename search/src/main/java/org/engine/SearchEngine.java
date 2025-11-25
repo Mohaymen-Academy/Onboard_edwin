@@ -2,6 +2,7 @@ package org.engine;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 class Utils {
@@ -91,11 +92,11 @@ public class SearchEngine {
         }
     }
 
-    public List<String> search(String query) {
+    public TreeSet<String> search(String query) {
         query = Utils.normalizeString(query);
         return searchIndex.getOrDefault(query, new TreeSet<>())
                 .stream()
                 .map(i -> docsNameIndex[i])
-                .toList();
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 }
