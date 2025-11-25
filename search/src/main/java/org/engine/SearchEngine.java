@@ -21,6 +21,7 @@ class Utils {
 }
 
 public class SearchEngine {
+    public static final boolean DEBUG = true;
 
     protected static final int MAX_DOCS = 1000;
     protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
@@ -40,11 +41,11 @@ public class SearchEngine {
     }
 
     private boolean addDoc(String docName) {
-        String normDoc = Utils.normalizeString(docName);
-        if (normDoc.isEmpty()) {
+        String normDocName = Utils.normalizeString(docName);
+        if (normDocName.isEmpty()) {
             return false;
         } else {
-            docsNameIndex[++docsCount] = normDoc;
+            docsNameIndex[++docsCount] = normDocName;
             return true;
         }
     }
@@ -67,8 +68,7 @@ public class SearchEngine {
                 int docIndex = docsCount;
                 ArrayList<String> tokens = tokenize(docs.get(docName));
 
-                // DEBUG
-                if (docIndex == 1) {
+                if (DEBUG && docIndex == 1) {
                     System.out.println(docName);
                     System.out.println(tokens);
                     System.out.println(tokens.size());
