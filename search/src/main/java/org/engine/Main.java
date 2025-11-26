@@ -1,9 +1,36 @@
 package org.engine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
+class Test {
+    private final SearchEngine engine;
+
+    public Test(SearchEngine engine) {
+        this.engine = engine;
+    }
+
+    void runAndPrintQuery(String query) {
+        System.out.printf("Query = %s\n", query);
+        System.out.println(engine.search(query));
+        System.out.println();
+    }
+
+    void samplesTest() {
+        ArrayList<String> queries = new ArrayList<>(List.of(
+                "+builder",
+                "meetings +automation +notincludedword -email"
+        ));
+
+        queries.forEach(this::runAndPrintQuery);
+    }
+}
+
 public class Main {
+    public static final boolean DEBUG = true;
+
     public static void main(String[] args) {
         Reader reader = new Reader();
         reader.readDocs("search/src/main/resources/SWBooks");
@@ -11,17 +38,11 @@ public class Main {
 
         HashMap<String, String> docs = reader.getDocs();
         SearchEngine engine = new SearchEngine(docs);
-        String query;
-
-        query = "+builder";
-        System.out.printf("Query = %s\n%s\n", query, engine.search(query));
-
-
-        query = "meetings +automation +notincludedword -email";
-        System.out.printf("Query = %s\n%s\n", query, engine.search(query));
+        new Test(engine).samplesTest();
 
 
         try (Scanner in = new Scanner(System.in)) {
+            String query;
             do {
                 query = in.nextLine();
                 System.out.println("SEARCH:");
@@ -30,4 +51,6 @@ public class Main {
             while (in.hasNext());
         }
     }
+
+
 }

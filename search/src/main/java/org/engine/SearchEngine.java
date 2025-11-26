@@ -22,7 +22,7 @@ class Utils {
 }
 
 class AdvanceQueryParser {
-    private HashSet<String> andPatterns, orPatterns, notPatterns;
+    private final HashSet<String> andPatterns, orPatterns, notPatterns;
 
     public AdvanceQueryParser(String query) {
         andPatterns = new HashSet<>();
@@ -59,8 +59,6 @@ public class SearchEngine {
     /*
         Implements inverted index algorithm
      */
-
-    public static final boolean DEBUG = true;
 
     protected static final int MAX_DOCS = 1000;
     protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
@@ -117,7 +115,7 @@ public class SearchEngine {
                 ArrayList<String> tokens = tokenize(docs.get(docName));
                 refreshSearchIndex(lastDocIndex, tokens);
 
-                if (DEBUG && docIndex == 1) {
+                if (Main.DEBUG && docIndex == 1) {
                     System.out.println(docName);
                     System.out.println(tokens);
                     System.out.println(tokens.size());
@@ -146,7 +144,7 @@ public class SearchEngine {
 
         query = Utils.normalizeString(query);
         AdvanceQueryParser parser = new AdvanceQueryParser(query);
-        if (DEBUG) {
+        if (Main.DEBUG) {
             System.out.printf("AND Patterns = %s\nOR PATTERNS = %s\nNOT PATTERNS = %s\n",
                     parser.getAndPatterns(),
                     parser.getOrPatterns(),
