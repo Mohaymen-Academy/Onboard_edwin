@@ -170,6 +170,7 @@ public class SearchEngine {
         }
 
         result.removeAll(findAllDocs(parser.getNotPatterns()));
+        // n.b. Searches like "-word" give no result
 
         return result;
     }
