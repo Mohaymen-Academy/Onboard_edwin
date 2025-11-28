@@ -1,19 +1,13 @@
 package org.engine;
 
+import interfaces.Normalizer;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-
 class Utils {
-    // Refactor: abstract normalizer
-    public static String normalizeString(String s) {
-        return s
-                .strip()
-                .replaceAll("'|\"", "")
-                .toLowerCase();
-    }
-
+    // Only for debug purposes
     public static void printDocsNameIndex(String[] docsNameIndex) {
         for (int i = 1; i < SearchEngine.MAX_DOCS && docsNameIndex[i] != null && !docsNameIndex[i].isEmpty(); i++) {
             System.out.printf("%d -> \"%s\"\n", i, docsNameIndex[i]);
@@ -57,24 +51,24 @@ class AdvanceQueryParser {
 
 public class SearchEngine {
     /*
-        Implements inverted index algorithm
+     * Implements inverted index algorithm
      */
 
     protected static final int MAX_DOCS = 1000;
     protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
             "is", "the", "i", "a", "an", "and", "of", "to", "in", "for",
             "on", "with", "as", "by", "this", "that", "it", "at", "from",
-            "which", "but", "or", "be", "not"
-    )); // Refactor: take as param
+            "which", "but", "or", "be", "not")); // Refactor: take as param
 
-
+    private Normalizer normalizer;
     private HashMap<String, SortedSet<Integer>> searchIndex;
     private final String[] docsNameIndex = new String[MAX_DOCS];
     private int lastDocIndex = 0;
 
-    public SearchEngine(HashMap<String, String> docs) {
+    public SearchEngine(HashMap<String, String> docs, Normalizer normalizer) {
+        this.normalizer = normalizer;
         refreshIndex(docs);
-//        Utils.printDocsNameIndex(docsNameIndex);
+        // Utils.printDocsNameIndex(docsNameIndex);
     }
 
     private boolean addDoc(String docName) {
@@ -89,19 +83,16 @@ public class SearchEngine {
     private ArrayList<String> tokenize(String doc) {
         return new ArrayList<>(Arrays
                 .stream(doc.split("\\W|[0-9]"))
-                .map(Utils::normalizeString)
+                .map(this.normalizer::normalize)
                 .filter(Predicate.not(stopWords::contains))
                 .filter(Predicate.not(String::isBlank))
-                .toList()
-        );
+                .toList());
     }
 
     private void refreshSearchIndex(int docIndex, ArrayList<String> tokens) {
-        tokens.forEach(word ->
-                searchIndex
-                        .computeIfAbsent(word, ignored -> new TreeSet<>())
-                        .add(docIndex)
-        );
+        tokens.forEach(word -> searchIndex
+                .computeIfAbsent(word, ignored -> new TreeSet<>())
+                .add(docIndex));
     }
 
     public void refreshIndex(HashMap<String, String> docs) {
@@ -109,7 +100,7 @@ public class SearchEngine {
         String normDocName;
 
         for (String docName : docs.keySet()) {
-            normDocName = Utils.normalizeString(docName);
+            normDocName = normalizer.normalize(docName);
             if (addDoc(normDocName)) {
                 int docIndex = lastDocIndex;
                 ArrayList<String> tokens = tokenize(docs.get(docName));
@@ -142,14 +133,13 @@ public class SearchEngine {
     public TreeSet<String> search(String query) {
         TreeSet<String> result = new TreeSet<>();
 
-        query = Utils.normalizeString(query);
+        query = normalizer.normalize(query);
         AdvanceQueryParser parser = new AdvanceQueryParser(query);
         if (Main.DEBUG) {
             System.out.printf("AND Patterns = %s\nOR PATTERNS = %s\nNOT PATTERNS = %s\n",
                     parser.getAndPatterns(),
                     parser.getOrPatterns(),
-                    parser.getNotPatterns()
-            );
+                    parser.getNotPatterns());
         }
 
         Set<String> orPatterns = parser.getOrPatterns();

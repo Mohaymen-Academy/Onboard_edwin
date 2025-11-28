@@ -21,8 +21,7 @@ class Test {
     void samplesTest() {
         ArrayList<String> queries = new ArrayList<>(List.of(
                 "+builder",
-                "meetings +automation +notincludedword -email"
-        ));
+                "meetings +automation +notincludedword -email"));
 
         queries.forEach(this::runAndPrintQuery);
     }
@@ -37,9 +36,14 @@ public class Main {
         // TODO: use best practices to read under resources (resource stream?)
 
         HashMap<String, String> docs = reader.getDocs();
-        SearchEngine engine = new SearchEngine(docs);
-        new Test(engine).samplesTest();
+        SearchEngine engine = new SearchEngine(
+                docs, s -> s
+                .strip()
+                .replaceAll("'|\"", "")
+                .toLowerCase()
+        );
 
+        new Test(engine).samplesTest();
 
         try (Scanner in = new Scanner(System.in)) {
             String query;
@@ -47,10 +51,8 @@ public class Main {
                 query = in.nextLine();
                 System.out.println("SEARCH:");
                 System.out.println(engine.search(query));
-            }
-            while (in.hasNext());
+            } while (in.hasNext());
         }
     }
-
 
 }
