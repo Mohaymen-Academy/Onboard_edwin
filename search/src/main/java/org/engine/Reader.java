@@ -6,9 +6,10 @@ import java.util.HashMap;
 
 public class Reader {
 
-    HashMap<String, String> docs = new HashMap<>();
+    private HashMap<String, String> docs = new HashMap<>();
 
     public void readDocs(String dirName) {
+        docs.clear();
         Path directory = Paths.get(dirName);
 
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*.txt")) {
