@@ -6,15 +6,14 @@ import java.util.Scanner;
 
 public record Test(InvertedSearchEngine engine) {
     private void runAndPrintQuery(String query) {
-        System.out.printf("Query = %s\n", query);
-        System.out.println(engine.search(query));
-        System.out.println();
+        System.out.printf("Query = %s\n%s\n\n", query, engine.search(query));
     }
 
     private void samplesTest() {
         ArrayList<String> queries = new ArrayList<>(List.of(
                 "+builder",
-                "meetings +automation +notincludedword -email"));
+                "meetings +automation +notincludedword -email"
+        ));
 
         queries.forEach(this::runAndPrintQuery);
     }
@@ -23,8 +22,8 @@ public record Test(InvertedSearchEngine engine) {
         try (Scanner in = new Scanner(System.in)) {
             String query;
             do {
+                System.out.println("Enter query to search:");
                 query = in.nextLine();
-                System.out.println("SEARCH:");
                 System.out.println(engine.search(query));
             } while (in.hasNext());
         }
