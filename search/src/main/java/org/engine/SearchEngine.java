@@ -55,10 +55,10 @@ public class SearchEngine {
      */
 
     protected static final int MAX_DOCS = 1000;
-    protected static final HashSet<String> stopWords = new HashSet<>(Arrays.asList(
+    protected static HashSet<String> stopWords = new HashSet<>(Arrays.asList(
             "is", "the", "i", "a", "an", "and", "of", "to", "in", "for",
             "on", "with", "as", "by", "this", "that", "it", "at", "from",
-            "which", "but", "or", "be", "not")); // Refactor: take as param
+            "which", "but", "or", "be", "not"));
 
     private Normalizer normalizer;
     private HashMap<String, SortedSet<Integer>> searchIndex;
@@ -69,6 +69,11 @@ public class SearchEngine {
         this.normalizer = normalizer;
         refreshIndex(docs);
         // Utils.printDocsNameIndex(docsNameIndex);
+    }
+
+    public void setStopWords(Set<String> stopWords) {
+        this.stopWords.clear();
+        this.stopWords.addAll(stopWords);
     }
 
     private boolean addDoc(String docName) {
