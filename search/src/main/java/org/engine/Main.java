@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 class Test {
-    private final SearchEngine engine;
+    private final InvertedSearchEngine engine;
 
-    public Test(SearchEngine engine) {
+    public Test(InvertedSearchEngine engine) {
         this.engine = engine;
     }
 
@@ -36,7 +36,7 @@ public class Main {
         // TODO: use best practices to read under resources (resource stream?)
 
         HashMap<String, String> docs = reader.getDocs();
-        SearchEngine engine = new SearchEngine(
+        InvertedSearchEngine engine = new InvertedSearchEngine(
                 docs, s -> s
                 .strip()
                 .replaceAll("'|\"", "")

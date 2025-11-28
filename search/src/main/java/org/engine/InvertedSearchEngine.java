@@ -1,6 +1,7 @@
 package org.engine;
 
 import interfaces.Normalizer;
+import interfaces.SearchEngine;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 class Utils {
     // Only for debug purposes
     public static void printDocsNameIndex(String[] docsNameIndex) {
-        for (int i = 1; i < SearchEngine.MAX_DOCS && docsNameIndex[i] != null && !docsNameIndex[i].isEmpty(); i++) {
+        for (int i = 1; i < InvertedSearchEngine.MAX_DOCS && docsNameIndex[i] != null && !docsNameIndex[i].isEmpty(); i++) {
             System.out.printf("%d -> \"%s\"\n", i, docsNameIndex[i]);
         }
     }
@@ -49,25 +50,30 @@ class AdvanceQueryParser {
     }
 }
 
-public class SearchEngine {
+public class InvertedSearchEngine implements SearchEngine {
     /*
      * Implements inverted index algorithm
      */
 
     protected static final int MAX_DOCS = 1000;
-    protected static HashSet<String> stopWords = new HashSet<>(Arrays.asList(
+    protected HashSet<String> stopWords = new HashSet<>(Arrays.asList(
             "is", "the", "i", "a", "an", "and", "of", "to", "in", "for",
             "on", "with", "as", "by", "this", "that", "it", "at", "from",
             "which", "but", "or", "be", "not"));
 
     private Normalizer normalizer;
     private HashMap<String, SortedSet<Integer>> searchIndex;
-    private final String[] docsNameIndex = new String[MAX_DOCS];
+    private String[] docsNameIndex;
     private int lastDocIndex = 0;
 
-    public SearchEngine(HashMap<String, String> docs, Normalizer normalizer) {
+    public InvertedSearchEngine(Normalizer normalizer) {
         this.normalizer = normalizer;
-        refreshIndex(docs);
+        clearIndex();
+    }
+
+    public InvertedSearchEngine (HashMap<String, String> docs, Normalizer normalizer) {
+        this(normalizer);
+        addEntries(docs);
         // Utils.printDocsNameIndex(docsNameIndex);
     }
 
@@ -100,24 +106,32 @@ public class SearchEngine {
                 .add(docIndex));
     }
 
-    public void refreshIndex(HashMap<String, String> docs) {
-        searchIndex = new HashMap<>();
-        String normDocName;
+    @Override
+    public void addEntry(String docName, String doc) {
+        String normDocName = normalizer.normalize(docName);
+        if (addDoc(normDocName)) {
+            int docIndex = lastDocIndex;
+            ArrayList<String> tokens = tokenize(doc);
+            refreshSearchIndex(lastDocIndex, tokens);
 
-        for (String docName : docs.keySet()) {
-            normDocName = normalizer.normalize(docName);
-            if (addDoc(normDocName)) {
-                int docIndex = lastDocIndex;
-                ArrayList<String> tokens = tokenize(docs.get(docName));
-                refreshSearchIndex(lastDocIndex, tokens);
-
-                if (Main.DEBUG && docIndex == 1) {
-                    System.out.println(docName);
-                    System.out.println(tokens);
-                    System.out.println(tokens.size());
-                }
+            if (Main.DEBUG && docIndex == 1) {
+                System.out.println(docName);
+                System.out.println(tokens);
+                System.out.println(tokens.size());
             }
         }
+    }
+
+    @Override
+    public void addEntries(Map<String, String> docs) {
+        docs.forEach(this::addEntry);
+    }
+
+    @Override
+    public void clearIndex() {
+        searchIndex = new HashMap<>();
+        docsNameIndex = new String[MAX_DOCS];
+        lastDocIndex = 0;
     }
 
     private TreeSet<String> findDocs(String word) {
