@@ -1,20 +1,12 @@
-package org.engine;
+package org.search.engine.impl;
 
-import interfaces.Normalizer;
-import interfaces.SearchEngine;
+import org.search.app.Main;
+import org.search.engine.Normalizer;
+import org.search.engine.SearchEngine;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-class Utils {
-    // Only for debug purposes
-    public static void printDocsNameIndex(String[] docsNameIndex) {
-        for (int i = 1; i < InvertedSearchEngine.MAX_DOCS && docsNameIndex[i] != null && !docsNameIndex[i].isEmpty(); i++) {
-            System.out.printf("%d -> \"%s\"\n", i, docsNameIndex[i]);
-        }
-    }
-}
 
 class AdvanceQueryParser {
     private final HashSet<String> andPatterns, orPatterns, notPatterns;
@@ -71,7 +63,7 @@ public class InvertedSearchEngine implements SearchEngine {
         clearIndex();
     }
 
-    public InvertedSearchEngine (HashMap<String, String> docs, Normalizer normalizer) {
+    public InvertedSearchEngine(HashMap<String, String> docs, Normalizer normalizer) {
         this(normalizer);
         addEntries(docs);
         // Utils.printDocsNameIndex(docsNameIndex);
@@ -182,5 +174,12 @@ public class InvertedSearchEngine implements SearchEngine {
         // n.b. Searches like "-word" give no result
 
         return result;
+    }
+
+    // Only for debug purposes
+    public static void printDocsNameIndex(String[] docsNameIndex) {
+        for (int i = 1; i < InvertedSearchEngine.MAX_DOCS && docsNameIndex[i] != null && !docsNameIndex[i].isEmpty(); i++) {
+            System.out.printf("%d -> \"%s\"\n", i, docsNameIndex[i]);
+        }
     }
 }

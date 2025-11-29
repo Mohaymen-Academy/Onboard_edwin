@@ -1,4 +1,4 @@
-package interfaces;
+package org.search.engine;
 
 import java.util.Map;
 import java.util.Set;

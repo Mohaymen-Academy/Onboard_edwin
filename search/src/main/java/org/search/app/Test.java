@@ -1,4 +1,6 @@
-package org.engine;
+package org.search.app;
+
+import org.search.engine.impl.InvertedSearchEngine;
 
 import java.util.ArrayList;
 import java.util.List;

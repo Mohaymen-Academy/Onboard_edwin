@@ -1,11 +1,10 @@
-package org.engine;
+package org.search.io;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.HashMap;
 
 public class Reader {
-
     private HashMap<String, String> docs = new HashMap<>();
 
     public void readDocs(String dirName) {

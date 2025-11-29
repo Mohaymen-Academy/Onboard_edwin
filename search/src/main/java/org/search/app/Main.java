@@ -1,4 +1,7 @@
-package org.engine;
+package org.search.app;
+
+import org.search.engine.impl.InvertedSearchEngine;
+import org.search.io.Reader;
 
 import java.util.HashMap;
 
